@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Summary AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-newspaper"></i>
+                <h1>News Summary AI</h1>
+            </div>
+            <p class="subtitle">Get AI-powered summaries of news articles from any URL</p>
+        </header>
+
+        <main class="main-content">
+            <div class="input-section">
+                <form id="summaryForm" class="url-form">
+                    <div class="input-group">
+                        <input type="url" 
+                               id="urlInput" 
+                               placeholder="Paste news article URL here..." 
+                               required
+                               class="url-input">
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <i class="fas fa-magic"></i>
+                            Summarize
+                        </button>
+                    </div>
+                </form>
+                <div class="demo-section">
+                    <p class="demo-text">Or try our demo with sample content:</p>
+                    <button type="button" class="demo-btn" onclick="loadDemo()">
+                        <i class="fas fa-play-circle"></i>
+                        Try Demo
+                    </button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Analyzing article and generating summary...</p>
+            </div>
+
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <div class="result-card">
+                    <div class="result-header">
+                        <h2 id="articleTitle"></h2>
+                        <a id="articleUrl" href="#" target="_blank" class="source-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            View Original
+                        </a>
+                    </div>
+                    <div class="summary-content">
+                        <h3><i class="fas fa-file-alt"></i> Summary</h3>
+                        <div id="summaryText" class="summary-text"></div>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn" onclick="copyToClipboard()">
+                            <i class="fas fa-copy"></i>
+                            Copy Summary
+                        </button>
+                        <button class="action-btn secondary" onclick="resetForm()">
+                            <i class="fas fa-plus"></i>
+                            New Summary
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 News Summary AI. Powered by AI technology.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
