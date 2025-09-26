@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
-import openai
+import replicate
 import os
 from dotenv import load_dotenv
 import re
@@ -14,8 +14,11 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# Configure OpenAI API key
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Configure Replicate API token
+REPLICATE_API_TOKEN = os.getenv('REPLICATE_API_TOKEN')
+replicate_client = None
+if REPLICATE_API_TOKEN:
+    replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
 
 class NewsExtractor:
     def __init__(self):
@@ -123,39 +126,33 @@ class NewsExtractor:
 
 class NewsSummarizer:
     def __init__(self):
-        api_key = os.getenv('OPENAI_API_KEY')
-        self.client = openai.OpenAI(api_key=api_key) if api_key else None
-    
+        self.client = replicate_client
+
     def summarize(self, title, content):
-        """Summarize news article using OpenAI"""
+        """Summarize news article using Replicate ibm-granite/granite-3.3-8b-instruct"""
         try:
-            # If OpenAI API key is not available, use fallback summarization
             if not self.client:
                 return self._fallback_summarize(content)
-            
+
             prompt = f"""
             Please provide a clear and concise summary of this news article. Focus on the key facts, main points, and important details.
-            
+
             Title: {title}
-            
-            Article Content: {content[:3000]}  # Limit content to avoid token limits
-            
+
+            Article Content: {content[:3000]}
+
             Summary:"""
-            
-            response = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a professional news summarizer. Provide clear, factual, and concise summaries of news articles."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=300,
-                temperature=0.3
+
+            output = self.client.run(
+                "ibm-granite/granite-3.3-8b-instruct",
+                input={"prompt": prompt}
             )
-            
-            return response.choices[0].message.content.strip()
-        
+            # Replicate returns a list of strings, join if needed
+            if isinstance(output, list):
+                return " ".join([str(o).strip() for o in output if o]).strip()
+            return str(output).strip()
         except Exception as e:
-            print(f"OpenAI API error: {e}")
+            print(f"Replicate API error: {e}")
             return self._fallback_summarize(content)
     
     def _fallback_summarize(self, content):
