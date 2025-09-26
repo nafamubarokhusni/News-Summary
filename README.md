@@ -5,7 +5,7 @@ An intelligent web application that uses AI to generate concise summaries of new
 ## Features
 
 - **Smart Content Extraction**: Automatically extracts article content from news URLs
-- **AI-Powered Summarization**: Uses OpenAI GPT-3.5-turbo for intelligent summarization (with fallback)
+- **AI-Powered Summarization**: Uses IBM Granite-3.3-8B-Instruct for intelligent summarization (with fallback)
 - **Clean Modern UI**: Responsive design that works on all devices
 - **Fast Processing**: Quick article analysis and summary generation
 - **Copy & Share**: Easy copy-to-clipboard functionality
@@ -15,7 +15,7 @@ An intelligent web application that uses AI to generate concise summaries of new
 
 - **Backend**: Python Flask
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **AI**: OpenAI GPT-3.5-turbo API (optional)
+- **AI**: IBM Granite-3.3-8B-Instruct API (optional)
 - **Content Extraction**: BeautifulSoup4, Requests
 - **Styling**: CSS Grid/Flexbox, Google Fonts, Font Awesome
 
@@ -39,10 +39,10 @@ cd News-Summary
 pip install -r requirements.txt
 ```
 
-3. (Optional) Set up OpenAI API:
+3. (Optional) Set up Replicate API:
 ```bash
 cp .env.example .env
-# Edit .env and add your OpenAI API key
+# Edit .env and add your Replicate API key
 ```
 
 4. Run the application:
@@ -73,13 +73,13 @@ The application works with most news websites including:
 
 ### Environment Variables
 
-- `OPENAI_API_KEY`: Your OpenAI API key (optional)
+- `REPLICATE_API_TOKEN`: Your Replicate API key (optional)
 - `FLASK_ENV`: Flask environment (development/production)
 - `FLASK_DEBUG`: Enable debug mode (True/False)
 
-### Without OpenAI API
+### Without Replicate API
 
-The application includes a fallback summarization method that works without the OpenAI API key. It will use extractive summarization techniques to generate basic summaries.
+The application includes a fallback summarization method that works without the Replicate API key. It will use extractive summarization techniques to generate basic summaries.
 
 ## API Endpoints
 
